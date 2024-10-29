@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_list_or_404, redirect, get_object_or_404
-from .models import Blog, Comment
+from .models import *
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
@@ -8,7 +8,10 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def home(request):
     blogs = Blog.objects.all()
-    return render(request, 'index.html', {'blogs': blogs})
+    categorys = Category.objects.all()
+    context = {"blogs":blogs,
+               "categorys":categorys}
+    return render(request, 'index.html', context)
 
 def signup(request):
     if request.method == 'POST':
@@ -30,9 +33,7 @@ def login(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            print(user)
             auth.login(request, user)
-            print("user login")
             return redirect('home')
         else:
             error_message = 'Invalid username or password'
@@ -58,6 +59,10 @@ def create(request):
 def blog_delete(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
     blog.delete()
+    return redirect('home')
+
+def logout(request):
+    auth.logout(request)
     return redirect('home')
 
 
@@ -90,6 +95,8 @@ def details(request, model_name, pk):
     context = {"model":model,
                "comments":comments}
     return render(request, 'details.html', context)
+
+    
 
 @login_required
 def comment(request):

@@ -14,6 +14,7 @@ urlpatterns = [
     path('create/', views.create, name='create'),
     path('blog/update/<int:pk>', views.blog_update, name='blog_update'),
     path('blog/delete/<int:pk>', views.blog_delete, name='blog_delete'),
+    path('logout/', views.logout, name="logout"),
    # path('comment/delete/<int:pk>', views.delete_comment, name='delete_comment'),
     #path('comment/update/<int:pk>', views.update_comment, name='update_comment')
    # path('comment/update/<int:pk>', views.upate_comment, name='update_comment')
